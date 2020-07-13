@@ -1,21 +1,15 @@
 import numpy as np
 from numpy.lib.scimath import sqrt as csqrt
 
-import pynam.complex_quad
+import pynam.util.complex_quad
 
 
 def g(w, wp):
 	return ((wp * (w + wp)) + 1) / (csqrt(wp ** 2 - 1) * csqrt((w + wp) ** 2 - 1))
 
 
-def s(k, e, v):
-	return (e - 1j * v) / k
-
-
 def f(k, e, v):
-	sv = s(k, e, v)
-	logv = np.log(np.real_if_close((sv + 1) / (sv - 1)) + 0j)
-	return (1 / k) * (2 * sv + ((1 - sv**2) * logv))
+	return ((4 / 3) * 1 / (e - 1j * v)) + (4 / 15) * (1 / ((e - 1j * v) ** 3)) * k ** 2
 
 
 def i1(w, wp, k, v):
@@ -41,7 +35,7 @@ def i2(w, wp, k, v):
 
 
 def a(w, k, v, t):
-	return pynam.complex_quad.complex_quadrature(
+	return pynam.util.complex_quad.complex_quadrature(
 		lambda wp: np.tanh((w + wp) / (2 * t)) * (i1(w, wp, k, v)),
 		1 - w, 1
 	)[0]
@@ -52,10 +46,10 @@ def b_int(wp, w, k, v, t):
 
 
 def b(w, k, v, t, b_max=np.inf):
-	return pynam.complex_quad.complex_quadrature(
+	return pynam.util.complex_quad.complex_quadrature(
 		lambda wp: b_int(wp, w, k, v, t), 1, b_max
 	)[0]
 
 
-def sigma_nam(w, k, v, t):
+def sigma_nam_alk(w, k, v, t):
 	return -1j * (3 / 4) * (v / w) * (-a(w, k, v, t) + b(w, k, v, t))

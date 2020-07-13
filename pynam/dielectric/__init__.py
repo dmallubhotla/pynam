@@ -1,0 +1,1 @@
+from pynam.dielectric.nam_dielectric_coefficient_approximator import get_nam_dielectric_coefficients
