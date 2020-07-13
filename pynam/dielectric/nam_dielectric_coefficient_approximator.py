@@ -36,9 +36,9 @@ class NamDielectricCoefficients(object):
 		self.d = d
 		self.u_l = np.real((-self.c + 1j * self.d) / (-self.a + 1j * self.b))
 
-	def eps(self):
+	def eps(self, u_c: float):
 
-		def piecewise_eps(u: float, u_c: float):
+		def piecewise_eps(u: float):
 			# todo add check for u_c vs u_l
 			if u < self.u_l:
 				return -self.a + 1j * self.b
