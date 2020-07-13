@@ -2,6 +2,8 @@ import numpy as np
 import pynam.dielectric.sigma_nam
 import pynam.dielectric.low_k_nam
 
+from pynam.baskets import CalculationParams, CalculationConstants
+
 from typing import Tuple
 
 FIXED_LARGE_MOMENTUM = 1e8
@@ -103,3 +105,15 @@ def get_nam_dielectric_coefficients(
 	c, d = get_big_momentum_coefficients(dedim)
 
 	return NamDielectricCoefficients(a, b, c, d)
+
+
+def get_nam_dielectric(u_c: float, params: CalculationParams, constants: CalculationConstants = CalculationConstants()):
+	sigma_n = params.omega_p**2 * params.tau / (4 * np.pi)
+	coeffs = get_nam_dielectric_coefficients(params.omega,
+											 sigma_n,
+											 params.tau,
+											 params.v_f,
+											 params.t_rel * params.t_c,
+											 params.t_c,
+											 constants.c_light)
+	return coeffs.eps(u_c)

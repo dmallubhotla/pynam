@@ -1,6 +1,7 @@
 import pytest
 import numpy as np
 import pynam.dielectric.nam_dielectric_coefficient_approximator
+from pynam.baskets import CalculationParams
 
 
 @pytest.mark.parametrize("test_input,expected", [
@@ -14,7 +15,6 @@ import pynam.dielectric.nam_dielectric_coefficient_approximator
 	)
 ])
 def test_dedimensionalise_parameters(test_input, expected):
-
 	actual_parameters = pynam.dielectric.nam_dielectric_coefficient_approximator.get_dedimensionalised_parameters(
 		*test_input)
 
@@ -47,12 +47,11 @@ def test_dedimensionalise_parameters(test_input, expected):
 	# 	(a, b, c, d, u_l)
 	# )
 	(
-		(1e9, 1e16, 1e-14, 2e6, 0.8e11, 1e11, 3e8),
-	 	(3.789672906817707e10, 3.257134605133221e8, 2.655709897616547e18, 2.15e16, 7.007759408279888e7)
+			(1e9, 1e16, 1e-14, 2e6, 0.8e11, 1e11, 3e8),
+			(3.789672906817707e10, 3.257134605133221e8, 2.655709897616547e18, 2.15e16, 7.007759408279888e7)
 	)
 ])
 def test_nam_coefficients(test_input, expected):
-
 	actual_coefficients = pynam.dielectric.nam_dielectric_coefficient_approximator.get_nam_dielectric_coefficients(
 		*test_input)
 
@@ -81,14 +80,14 @@ def test_nam_coefficients(test_input, expected):
 
 def test_nam_eps():
 	u_c = 1e15
-	eps_to_test = pynam.dielectric.nam_dielectric_coefficient_approximator.get_nam_dielectric_coefficients(
-		1e9,
-		1e16,
-		1e-14,
-		2e6,
-		0.8e11,
-		1e11,
-		3e8).eps(u_c)
+	eps_to_test = pynam.dielectric.nam_dielectric_coefficient_approximator.get_nam_dielectric(u_c, CalculationParams(
+		omega=1e9,
+		omega_p=3.54491e15,
+		tau=1e-14,
+		v_f=2e6,
+		t_rel=0.8,
+		t_c=1e11
+	))
 
 	np.testing.assert_allclose(
 		eps_to_test(10), -3.789672906817707e10 + 3.257134605133221e8j,
