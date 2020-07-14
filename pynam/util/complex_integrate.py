@@ -15,6 +15,7 @@ def complex_quad(func, a, b, **kwargs):
 
 	return real_integral[0] + 1j * imag_integral[0], real_integral[1:], imag_integral[1:]
 
+
 def complex_quadrature(func, a, b, **kwargs):
 
 	def real_func(x):

@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.lib.scimath import sqrt as csqrt
 
-import pynam.util.complex_quad
+import pynam.util
 
 
 def g(w, wp):
@@ -35,7 +35,7 @@ def i2(w, wp, k, v):
 
 
 def a(w, k, v, t):
-	return pynam.util.complex_quad.complex_quad(
+	return pynam.util.complex_quad(
 		lambda wp: np.tanh((w + wp) / (2 * t)) * (i1(w, wp, k, v)),
 		1 - w, 1
 	)[0]
@@ -46,7 +46,7 @@ def b_int(wp, w, k, v, t):
 
 
 def b(w, k, v, t, b_max=np.inf):
-	return pynam.util.complex_quad.complex_quad(
+	return pynam.util.complex_quad(
 		lambda wp: b_int(wp, w, k, v, t), 1, b_max
 	)[0]
 

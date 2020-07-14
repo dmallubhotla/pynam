@@ -12,7 +12,7 @@ def get_zeta_p_integrand(eps: Callable[[float], complex]) -> Callable[[float, fl
 	:param eps:
 	:return:
 	"""
-	def zeta_p_integrand(u: float, y: float) -> complex:
+	def zeta_p_integrand(y: float, u: float) -> complex:
 		"""
 		Here y and u are in units of vacuum wavelength, coming from Ford-Weber / from the EWJN noise expressions.
 		:param u:
@@ -31,15 +31,15 @@ def get_zeta_p_integrand(eps: Callable[[float], complex]) -> Callable[[float, fl
 	return zeta_p_integrand
 
 
-# def get_zeta_p_function(eps: Callable[[float], complex]):
-# 	def zeta_p(u: float) -> complex:
-# 		zeta_p_integrand = get_zeta_integrand(eps)
-#
-# 		integral_result = pynam.util.complex_quad(zeta_p_integrand, 0, np.inf)
-#
-# 		print(integral_result)
-# 		integral = integral_result[0]
-#
-# 		return integral * 2j
-#
-# 	return zeta_p
+def get_zeta_p_function(eps: Callable[[float], complex]):
+	def zeta_p(u: float) -> complex:
+		zeta_p_integrand = get_zeta_p_integrand(eps)
+
+		integral_result = pynam.util.complex_quad(lambda y: zeta_p_integrand(y, u), 0, np.inf)
+
+		print(integral_result)
+		integral = integral_result[0]
+
+		return integral * 2j
+
+	return zeta_p

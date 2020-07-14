@@ -41,7 +41,7 @@ def i2(w, wp, k, v):
 
 
 def a(w, k, v, t):
-	result = pynam.util.complex_quad.complex_quad(
+	result = pynam.util.complex_quad(
 		lambda wp: np.tanh((w + wp) / (2 * t)) * (i1(w, wp, k, v)),
 		1 - w, 1,
 		epsabs=1e-10
