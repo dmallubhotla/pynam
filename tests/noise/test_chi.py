@@ -17,6 +17,8 @@ def chi_zz_e_lindhard():
 	# z   chi_zz_e_lindhard(z)
 	(1e-5, 4.0249088868003124e6),
 	(1e-6, 4.400474453780887e9),
+	(1e-7, 7.768467746685921e12),
+	(1e-8, 1.8541895525296864e16),
 ])
 def test_chi_zz_e_lindhard(chi_zz_e_lindhard, test_input, expected):
 	actual = chi_zz_e_lindhard(test_input)
