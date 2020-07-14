@@ -44,5 +44,5 @@ def test_zeta_p(zeta_p_lindhard, test_input, expected):
 
 	np.testing.assert_allclose(
 		actual, expected,
-		rtol=1e-7, err_msg='Zeta_p is inaccurate for Lindhard case', verbose=True
+		rtol=1e-4, err_msg='Zeta_p is inaccurate for Lindhard case', verbose=True
 	)

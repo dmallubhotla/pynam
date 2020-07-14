@@ -3,6 +3,8 @@ import pynam.util
 from typing import Callable
 import numpy as np
 
+SMALL_X_BOUNDARY = 1e3
+
 
 def get_zeta_p_integrand(eps: Callable[[float], complex]) -> Callable[[float, float], complex]:
 	""" Gets the integrand function zeta_p_integrand(u, y).
@@ -12,6 +14,7 @@ def get_zeta_p_integrand(eps: Callable[[float], complex]) -> Callable[[float, fl
 	:param eps:
 	:return:
 	"""
+
 	def zeta_p_integrand(y: float, u: float) -> complex:
 		"""
 		Here y and u are in units of vacuum wavelength, coming from Ford-Weber / from the EWJN noise expressions.
@@ -32,14 +35,40 @@ def get_zeta_p_integrand(eps: Callable[[float], complex]) -> Callable[[float, fl
 
 
 def get_zeta_p_function(eps: Callable[[float], complex]):
+	def integrand1_small_x(x: float, u: float) -> complex:
+		u2 = u ** 2
+		x2 = x ** 2
+		eps_value = eps(u * np.sqrt(1 + x ** 2))
+		return (x2 / (eps_value - 1 - x2)) / ((1 + x2) * u2)
+
+	def integrand1_big_x(x: float, u: float) -> complex:
+		u2 = u ** 2
+		x2 = x ** 2
+		eps_value = eps(u * x)
+		return 1 / ((eps_value - x2) * u2)
+
+	# 1 / (eps(u * sqrt(1 + x^2)))   * 1 / (1 + x^2)
+
+	def integrand2_small_x(x: float, u: float) -> complex:
+		x2 = x ** 2
+		eps_value = eps(u * np.sqrt(1 + x ** 2))
+		return 1 / (eps_value * (1 + x2))
+
+	def integrand2_big_x(x: float, u: float) -> complex:
+		x2 = x ** 2
+		eps_value = eps(u * x)
+		return 1 / (eps_value * x2)
+
 	def zeta_p(u: float) -> complex:
 		zeta_p_integrand = get_zeta_p_integrand(eps)
 
-		integral_result = pynam.util.complex_quad(lambda y: zeta_p_integrand(y, u), 0, np.inf)
+		i1_small = pynam.util.complex_quad(lambda x: integrand1_small_x(x, u), 0, SMALL_X_BOUNDARY)
+		i1_big = pynam.util.complex_quad(lambda x: integrand1_big_x(x, u), SMALL_X_BOUNDARY, np.inf)
+		i2_small = pynam.util.complex_quad(lambda x: integrand2_small_x(x, u), 0, SMALL_X_BOUNDARY)
+		i2_big = pynam.util.complex_quad(lambda x: integrand2_big_x(x, u), SMALL_X_BOUNDARY, np.inf)
 
-		print(integral_result)
-		integral = integral_result[0]
+		integral = sum(term[0] for term in [i1_small, i2_small, i1_big, i2_big])
 
-		return integral * 2j
+		return integral * 2j * u
 
 	return zeta_p
