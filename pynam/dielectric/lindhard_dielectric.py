@@ -31,7 +31,7 @@ class LindhardDielectric(object):
 			# converts u from inverse vacuum wavelength to inverse mean free path
 			u = u_inverse_wavelength * self.v_f / self.c_light
 
-			if u < LINDHARD_SERIES_THRESHOLD * self.c_light / self.omega:
+			if u < LINDHARD_SERIES_THRESHOLD * self.v_f / self.omega:
 				return eps_series(u)
 			else:
 				return eps_full_lindhard(u)
