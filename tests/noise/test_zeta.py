@@ -38,6 +38,8 @@ def zeta_p_lindhard():
 @pytest.mark.parametrize("test_input,expected", [
 	# u    zeta_p(u)
 	(1, 0.000199609 - 0.000199608j),
+	(1e5, 0.0025183067257958545 + 34.11087430547122j),
+	(1e8, 14.348462224076096 + 3.391157983312813e7j)
 ])
 def test_zeta_p(zeta_p_lindhard, test_input, expected):
 	actual = zeta_p_lindhard(test_input)
