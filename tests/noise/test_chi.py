@@ -27,3 +27,15 @@ def test_chi_zz_e_lindhard(chi_zz_e_lindhard, test_input, expected):
 		actual, expected,
 		rtol=1e-3, err_msg='chi_zz_e is inaccurate for Lindhard case', verbose=True
 	)
+
+
+@pytest.mark.parametrize("test_input,expected", [
+	# z   chi_zz_e_lindhard(z)
+	(1e-6, 4.400474453780887e9),
+])
+def test_chi_zz_e_lindhard_benchmark(benchmark, chi_zz_e_lindhard, test_input, expected):
+	actual = benchmark(chi_zz_e_lindhard, test_input)
+	np.testing.assert_allclose(
+		actual, expected,
+		rtol=1e-3, err_msg='chi_zz_e is inaccurate for Lindhard case', verbose=True
+	)
