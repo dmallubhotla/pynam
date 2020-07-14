@@ -62,10 +62,10 @@ def get_zeta_p_function(eps: Callable[[float], complex]):
 	def zeta_p(u: float) -> complex:
 		zeta_p_integrand = get_zeta_p_integrand(eps)
 
-		i1_small = pynam.util.complex_quad(lambda x: integrand1_small_x(x, u), 0, SMALL_X_BOUNDARY)
-		i1_big = pynam.util.complex_quad(lambda x: integrand1_big_x(x, u), SMALL_X_BOUNDARY, np.inf)
-		i2_small = pynam.util.complex_quad(lambda x: integrand2_small_x(x, u), 0, SMALL_X_BOUNDARY)
-		i2_big = pynam.util.complex_quad(lambda x: integrand2_big_x(x, u), SMALL_X_BOUNDARY, np.inf)
+		i1_small = pynam.util.complex_quad(lambda x: integrand1_small_x(x, u), 0, SMALL_X_BOUNDARY, epsabs=1e-12)
+		i1_big = pynam.util.complex_quad(lambda x: integrand1_big_x(x, u), SMALL_X_BOUNDARY, np.inf, epsabs=1e-12)
+		i2_small = pynam.util.complex_quad(lambda x: integrand2_small_x(x, u), 0, SMALL_X_BOUNDARY, epsabs=1e-12)
+		i2_big = pynam.util.complex_quad(lambda x: integrand2_big_x(x, u), SMALL_X_BOUNDARY, np.inf, epsabs=1e-12)
 
 		integral = sum(term[0] for term in [i1_small, i2_small, i1_big, i2_big])
 
