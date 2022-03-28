@@ -1,0 +1,10 @@
+{
+	"bumpFiles": [
+		{
+			"filename": "pyproject.toml",
+			"updater": "scripts/standard-version/pyproject-updater.js"
+		}
+	],
+	"sign": true,
+	"tag-prefix": ""
+}

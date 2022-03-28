@@ -1,8 +1,13 @@
 class CalculationConstants(object):
-	"""Holds physical constants, in SI units
-	"""
+	"""Holds physical constants, in SI units"""
 
-	def __init__(self, epsilon_0=8.854e-12, h_bar=1.0546e-34, c_light=3e8, electron_mass=9.10938356e-31):
+	def __init__(
+		self,
+		epsilon_0=8.854e-12,
+		h_bar=1.0546e-34,
+		c_light=3e8,
+		electron_mass=9.10938356e-31,
+	):
 		"""Initialises constants in SI units, with sensible defaults
 
 		:param epsilon_0:
@@ -18,11 +23,18 @@ class CalculationConstants(object):
 
 
 class CalculationParams(object):
-	"""Holds the parameters describing a calculation, in SI units.
-	"""
+	"""Holds the parameters describing a calculation, in SI units."""
 
-	def __init__(self, omega: float = None, omega_p: float = None, tau: float = None, v_f: float = None,
-				 t_rel: float = None, t_c: float = None, dipole_moment: float = None):
+	def __init__(
+		self,
+		omega: float = None,
+		omega_p: float = None,
+		tau: float = None,
+		v_f: float = None,
+		t_rel: float = None,
+		t_c: float = None,
+		dipole_moment: float = None,
+	):
 		"""Creates parameter object, SI units
 
 		:param omega:

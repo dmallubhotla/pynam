@@ -6,8 +6,10 @@ import numpy as np
 SMALL_X_BOUNDARY = 1e3
 
 
-def get_zeta_p_integrand(eps: Callable[[float], complex]) -> Callable[[float, float], complex]:
-	""" Gets the integrand function zeta_p_integrand(u, y).
+def get_zeta_p_integrand(
+	eps: Callable[[float], complex]
+) -> Callable[[float, float], complex]:
+	"""Gets the integrand function zeta_p_integrand(u, y).
 
 	Returns zeta_p_integrand(u, y), a complex valued function of two momenta in units of vacuum wavelength.
 
@@ -22,8 +24,8 @@ def get_zeta_p_integrand(eps: Callable[[float], complex]) -> Callable[[float, fl
 		:param y:
 		:return:
 		"""
-		u2 = u ** 2
-		y2 = y ** 2
+		u2 = u**2
+		y2 = y**2
 		k2 = u2 + y2
 		k = np.sqrt(k2)
 		eps_value = eps(k)
@@ -36,36 +38,44 @@ def get_zeta_p_integrand(eps: Callable[[float], complex]) -> Callable[[float, fl
 
 def get_zeta_p_function(eps: Callable[[float], complex]):
 	def integrand1_small_x(x: float, u: float) -> complex:
-		u2 = u ** 2
-		x2 = x ** 2
-		eps_value = eps(u * np.sqrt(1 + x ** 2))
+		u2 = u**2
+		x2 = x**2
+		eps_value = eps(u * np.sqrt(1 + x**2))
 		return (x2 / (eps_value - 1 - x2)) / ((1 + x2) * u2)
 
 	def integrand1_big_x(x: float, u: float) -> complex:
-		u2 = u ** 2
-		x2 = x ** 2
+		u2 = u**2
+		x2 = x**2
 		eps_value = eps(u * x)
 		return 1 / ((eps_value - x2) * u2)
 
 	# 1 / (eps(u * sqrt(1 + x^2)))   * 1 / (1 + x^2)
 
 	def integrand2_small_x(x: float, u: float) -> complex:
-		x2 = x ** 2
-		eps_value = eps(u * np.sqrt(1 + x ** 2))
+		x2 = x**2
+		eps_value = eps(u * np.sqrt(1 + x**2))
 		return 1 / (eps_value * (1 + x2))
 
 	def integrand2_big_x(x: float, u: float) -> complex:
-		x2 = x ** 2
+		x2 = x**2
 		eps_value = eps(u * x)
 		return 1 / (eps_value * x2)
 
 	def zeta_p(u: float) -> complex:
-		zeta_p_integrand = get_zeta_p_integrand(eps)
+		# zeta_p_integrand = get_zeta_p_integrand(eps)
 
-		i1_small = pynam.util.complex_quad(lambda x: integrand1_small_x(x, u), 0, SMALL_X_BOUNDARY, epsabs=1e-12)
-		i1_big = pynam.util.complex_quad(lambda x: integrand1_big_x(x, u), SMALL_X_BOUNDARY, np.inf, epsabs=1e-12)
-		i2_small = pynam.util.complex_quad(lambda x: integrand2_small_x(x, u), 0, SMALL_X_BOUNDARY, epsabs=1e-12)
-		i2_big = pynam.util.complex_quad(lambda x: integrand2_big_x(x, u), SMALL_X_BOUNDARY, np.inf, epsabs=1e-12)
+		i1_small = pynam.util.complex_quad(
+			lambda x: integrand1_small_x(x, u), 0, SMALL_X_BOUNDARY, epsabs=1e-12
+		)
+		i1_big = pynam.util.complex_quad(
+			lambda x: integrand1_big_x(x, u), SMALL_X_BOUNDARY, np.inf, epsabs=1e-12
+		)
+		i2_small = pynam.util.complex_quad(
+			lambda x: integrand2_small_x(x, u), 0, SMALL_X_BOUNDARY, epsabs=1e-12
+		)
+		i2_big = pynam.util.complex_quad(
+			lambda x: integrand2_big_x(x, u), SMALL_X_BOUNDARY, np.inf, epsabs=1e-12
+		)
 
 		integral = sum(term[0] for term in [i1_small, i2_small, i1_big, i2_big])
 

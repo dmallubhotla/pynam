@@ -5,7 +5,7 @@ import pynam.util
 
 
 def g(w, wp):
-	return ((wp * (w + wp)) + 1) / (csqrt(wp ** 2 - 1) * csqrt((w + wp) ** 2 - 1))
+	return ((wp * (w + wp)) + 1) / (csqrt(wp**2 - 1) * csqrt((w + wp) ** 2 - 1))
 
 
 def s(k, e, v):
@@ -21,7 +21,7 @@ def f(k, e, v):
 def i1(w, wp, k, v):
 	gv = g(w, wp)
 	e1 = csqrt((w + wp) ** 2 - 1)
-	e2 = csqrt(wp ** 2 - 1)
+	e2 = csqrt(wp**2 - 1)
 
 	f_upper = f(k, np.real(e1 - e2), np.imag(e1 + e2) + 2 * v) * (gv + 1)
 	f_lower = f(k, np.real(-e1 - e2), np.imag(e1 + e2) + 2 * v) * (gv - 1)
@@ -32,7 +32,7 @@ def i1(w, wp, k, v):
 def i2(w, wp, k, v):
 	gv = g(w, wp)
 	e1 = csqrt((w + wp) ** 2 - 1)
-	e2 = csqrt(wp ** 2 - 1)
+	e2 = csqrt(wp**2 - 1)
 
 	f_upper = f(k, np.real(e1 - e2), np.imag(e1 + e2) + 2 * v) * (gv + 1)
 	f_lower = f(k, np.real(e1 + e2), np.imag(e1 + e2) + 2 * v) * (gv - 1)
@@ -43,21 +43,22 @@ def i2(w, wp, k, v):
 def a(w, k, v, t):
 	result = pynam.util.complex_quad(
 		lambda wp: np.tanh((w + wp) / (2 * t)) * (i1(w, wp, k, v)),
-		1 - w, 1,
-		epsabs=1e-10
+		1 - w,
+		1,
+		epsabs=1e-10,
 	)
 
 	return result[0]
 
 
 def b_int(wp, w, k, v, t):
-	return (np.tanh((w + wp) / (2 * t)) * i1(w, wp, k, v)) - (np.tanh(wp / (2 * t)) * i2(w, wp, k, v))
+	return (np.tanh((w + wp) / (2 * t)) * i1(w, wp, k, v)) - (
+		np.tanh(wp / (2 * t)) * i2(w, wp, k, v)
+	)
 
 
 def b(w, k, v, t, b_max=np.inf):
-	return pynam.util.complex_quad(
-		lambda wp: b_int(wp, w, k, v, t), 1, b_max
-	)[0]
+	return pynam.util.complex_quad(lambda wp: b_int(wp, w, k, v, t), 1, b_max)[0]
 
 
 def sigma_nam(w, k, v, t):
